@@ -20,10 +20,10 @@ pipeline {
     }
     post {
             success {
-                sh 'curl -u srwight:c1b916d65b88cec4693fd14f04ebf8a3217b3d47 "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
+                sh 'curl -u srwight:fb28342331c7f1c6067e03267515a2cc0242da34 "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
             }
             failure {
-                sh 'curl -u srwight:c1b916d65b88cec4693fd14f04ebf8a3217b3d47 "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
+                sh 'curl -u srwight:fb28342331c7f1c6067e03267515a2cc0242da34 "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
             }
             always {
                 junit 'test-results/results.xml'
