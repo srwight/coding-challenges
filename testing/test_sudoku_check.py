@@ -23,7 +23,7 @@ PASS_DATA = [\
     '346891527',
     '271543986']
 
-pass_data_squares = [\
+PASS_DATA_SQUARES = [\
     '912867435',
     '468135279',
     '753492168',
@@ -97,7 +97,7 @@ def test_stack_squares():
     comparing a known board to a manually unfolded board
     '''
     result = preprocess(PASS_DATA)
-    result_squares = preprocess(pass_data_squares)
+    result_squares = preprocess(PASS_DATA_SQUARES)
     result = stack_squares(result)
     np.testing.assert_array_equal(result, result_squares)
 
