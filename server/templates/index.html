@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+This API checks a Sudoku board to determine if it is a valid sudoku board.<br>
+    It receives JSON POST requests at <a href="/json" >/json</a>.<br>
+    <br>
+    Please format your JSON request as a nested array of nine arrays of numerals or spaces as follows:<br>
+    <pre>
+[
+    [2,5,4,7,2,4,7,2,4,3],
+    ...
+    [3,5,8,6,2,5,6,3,' ',3]
+]
+    </pre>
+{% endblock %} 
