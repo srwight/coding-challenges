@@ -18,9 +18,9 @@ pipeline {
             }
         }
         stage('delivery') {
-            when {branch 'master'}
+            // when {branch 'master'}
             steps {
-                echo 'I\'m in'
+                echo $branch
             }
         }
     }
