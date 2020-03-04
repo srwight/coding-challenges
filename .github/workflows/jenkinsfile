@@ -13,7 +13,7 @@ pipeline {
                 withEnv(["HOME=$env.WORKSPACE","TERM='linux'"]){
                     sh 'python -m pytest --cov=./ --verbose --cov-fail-under=97 --junit-xml test-results/results.xml ./testing/'
                     sh 'python -m coverage xml'
-                    sh 'python -m pylint --rcfile=testing/pylint.cfg $(find . -maxdepth 1 -name "*.py" -print) ./ > test-results/pylint.log'
+                    sh 'python -m pylint --rcfile=testing/pylint.cfg $(find . -maxdepth 2 -name "*.py" -print) ./ > test-results/pylint.log'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                 junit 'test-results/results.xml'
                 step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
 
-                recordIssues enabledForFailure: true, tools: pyLint(pattern: 'test-results/pylint.log')
+                // recordIssues enabledForFailure: true, tools: pyLint(pattern: 'test-results/pylint.log')
                 sh 'rm .local -rf'
             }
     }
