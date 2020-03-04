@@ -17,6 +17,12 @@ pipeline {
                 }
             }
         }
+        stage('delivery') {
+            when {branch 'master'}
+            steps {
+                echo 'I\'m in'
+            }
+        }
     }
     post {
             success {
@@ -28,8 +34,6 @@ pipeline {
             always {
                 junit 'test-results/results.xml'
                 step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
-
-                // sh 'rm .local -rf'
             }
     }
 }
