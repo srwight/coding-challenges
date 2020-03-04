@@ -17,17 +17,16 @@ pipeline {
                 }
             }
         }
-        stage('delivery') {
-            agent { docker { image 'docker:dind'} }
-            when { environment name: 'GIT_BRANCH', value: 'origin/master'}
-            steps {
-                script {
-                    def curImage = docker.build("srwight/codingchallenges:2.${env.BUILD_ID}")
-                    curImage.push()
-                    curImage.push('latest')
-                }
-            }
-        }
+        // stage('delivery') {
+        //     when { environment name: 'GIT_BRANCH', value: 'origin/master'}
+        //     steps {
+        //         script {
+        //             def curImage = docker.build("srwight/codingchallenges:2.${env.BUILD_ID}")
+        //             curImage.push()
+        //             curImage.push('latest')
+        //         }
+        //     }
+        // }
     }
     post {
             success {
