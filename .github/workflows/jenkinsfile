@@ -19,7 +19,9 @@ pipeline {
         }
         stage('delivery') {
             when {branch 'master'}
-            echo 'I\'m in'
+            steps {
+                echo 'I\'m in'
+            }
         }
     }
     post {
