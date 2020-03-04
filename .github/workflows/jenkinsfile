@@ -17,10 +17,10 @@ pipeline {
                 }
             }
         }
-    }
-    delivery {
-        when {branch 'master'}
-        echo 'I\'m in'
+        stage('delivery') {
+            when {branch 'master'}
+            echo 'I\'m in'
+        }
     }
     post {
             success {
