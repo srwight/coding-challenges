@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'python:3.7' } }
+    agent { docker { image 'python:3.8' } }
     stages {
         stage('build') {
             steps {
@@ -10,19 +10,26 @@ pipeline {
         }
         stage('test') {
             steps {
-                withEnv(["HOME=$env.WORKSPACE"]){
-                    sh 'python -m pylint -f parseable *.py > pylint.out'
-                    sh 'python -m pytest --cov=./ --verbose --junit-xml test-results/results.xml ./tests/'
+                withEnv(["HOME=$env.WORKSPACE","TERM='linux'"]){
+                    sh 'python -m pytest --cov=./ --verbose --cov-fail-under=97 --junit-xml test-results/results.xml ./testing/'
                     sh 'python -m coverage xml'
+                    sh 'python -m pylint --rcfile=testing/pylint.cfg $(find . -maxdepth 2 -name "*.py" -print) ./ > test-results/pylint.log'
                 }
             }
         }
     }
     post {
+            success {
+                sh 'curl -u srwight:d6ac278febed6edb7c1324476a976c921ba1539a "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
+            }
+            failure {
+                sh 'curl -u srwight:d6ac278febed6edb7c1324476a976c921ba1539a "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
+            }
             always {
                 junit 'test-results/results.xml'
                 step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
-                sh 'rm .local -rf'
+
+                // sh 'rm .local -rf'
             }
     }
 }
