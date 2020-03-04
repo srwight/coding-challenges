@@ -41,6 +41,28 @@ fail_shape = [\
         '598726314',
         '271543986']
 
+fail_shape_2 = [\
+    '912468753',
+    '867135492',
+    '435279168',
+    '784952631',
+    '629317845',
+    '15368429',
+    '598726314',
+    '346891527',
+    '271543986']
+
+fail_contents = [\
+    '912468753',
+    '867135492',
+    '435279168',
+    '78495a631',
+    '629317845',
+    '153684279',
+    '598726314',
+    '3e6891527',
+    '271543986']
+
 with open('testing/testdata.json', 'rt') as fl_in:
     fail_data = load(fl_in)
 
@@ -50,6 +72,8 @@ def test_check_shape_contents():
             assert check_shape_contents(fail_data[errortype][test])
     
     assert not check_shape_contents(fail_shape)
+    assert not check_shape_contents(fail_shape_2)
+    assert not check_shape_contents(fail_contents)
 
 def test_preprocess():
     result=preprocess(pass_data)
@@ -70,8 +94,7 @@ def test_sudoku_check():
     for errortype in fail_data:
         for test in fail_data[errortype]:
             assert not sudoku_check(fail_data[errortype][test])
+
+    assert not sudoku_check(fail_contents)
     
     assert sudoku_check(pass_data)
-
-if __name__ == "__main__":
-    test_sudoku_check()
