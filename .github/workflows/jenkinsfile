@@ -13,7 +13,7 @@ pipeline {
                 withEnv(["HOME=$env.WORKSPACE","TERM='linux'"]){
                     sh 'python -m pytest --cov=./ --verbose --cov-fail-under=97 --junit-xml test-results/results.xml ./testing/'
                     sh 'python -m coverage xml'
-                    sh 'python -m pylint --rcfile=testing/pylint.cfg $(find . -maxdepth 2 -name "*.py" -print) ./ > test-results/pylint.log'
+                    sh 'python -m pylint --rcfile=testing/pylint.cfg $(find . -maxdepth 2 -name "*.py" -print) ./' // > test-results/pylint.log'
                 }
             }
         }
