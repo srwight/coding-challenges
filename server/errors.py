@@ -10,7 +10,7 @@ def bad_request_400(err):
     return {'error':'Your JSON string does not match the required format.',
             'format':'One array containing nine arrays, each of which contains \
                      nine elements that are either numerals or single spaces',
-            'text':err}, 400
+            'text':str(err)}, 400
 
 def unknown_404(err):
     '''
@@ -32,4 +32,4 @@ def teapot_418(err):
     '''
     Receives error message and returns error information
     '''
-    return render_template('error_418.html', error=err), 418
+    return render_template('error_418.html', error=str(err)), 418
