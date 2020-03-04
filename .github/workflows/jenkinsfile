@@ -20,7 +20,7 @@ pipeline {
         stage('delivery') {
             // when {branch 'master'}
             steps {
-                echo $branch
+                sh 'printenv'
             }
         }
     }
