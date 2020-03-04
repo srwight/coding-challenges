@@ -10,7 +10,7 @@ def test_bad_request_400(test_client):
     response = test_client.post('/json', json={"this":"that"})
     response_json = loads(response.data.decode('utf-8'))
     assert response.status_code == 400
-    assert all([value in ['error', 'format', 'test'] for value in response_json])
+    assert all([value in ['error', 'format', 'text'] for value in response_json])
 
 def test_unknown_404(test_client):
     '''
