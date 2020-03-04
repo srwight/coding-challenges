@@ -1,30 +1,33 @@
+'''
+This module defines the endpoints available on this server.
+'''
 from flask import   request,\
-                    json,\
-                    url_for,\
                     abort,\
                     render_template,\
                     Blueprint
-                    
-# from main import app
+
 from server.sudoku_check import sudoku_check
 
-simple_blueprint = Blueprint('sb',__name__)
+SIMPLE_BLUEPRINT = Blueprint('sb', __name__)
 
-@simple_blueprint.route('/')
+@SIMPLE_BLUEPRINT.route('/')
 def home():
+    '''
+    Main landing page and documentation
+    '''
     return render_template("index.html")
 
-@simple_blueprint.route('/json', methods=['POST'])
+@SIMPLE_BLUEPRINT.route('/json', methods=['POST'])
 def json_endpoint():
+    '''
+    Endpoint to receive json input
+    '''
     if not request.is_json:
         abort(418)
     data = request.get_json()
-    if type(data) != list:
-        print('Outer List')
-        print(type(data))
+    if not isinstance(data, list):
         abort(400)
-    if any(type(row) not in [list, str] for row in data):
-        print('Inner type')
+    if any(not isinstance(row, (list, str)) for row in data):
         abort(400)
     result = str(sudoku_check(data))
     return {"result":result}
