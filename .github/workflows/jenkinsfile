@@ -18,6 +18,10 @@ pipeline {
             }
         }
     }
+    delivery {
+        when {branch 'master'}
+        echo 'I\'m in'
+    }
     post {
             success {
                 sh 'curl -u srwight:d6ac278febed6edb7c1324476a976c921ba1539a "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
@@ -28,8 +32,6 @@ pipeline {
             always {
                 junit 'test-results/results.xml'
                 step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
-
-                // sh 'rm .local -rf'
             }
     }
 }
