@@ -20,10 +20,12 @@ pipeline {
         stage('delivery') {
             when { environment name: 'GIT_BRANCH', value: 'origin/master'}
             steps {
-                def curImage = docker.build("srwight/codingchallenges:2.${env.BUILD_ID}")
-                curImage.push()
+                withEnv(["HOME=$env.WORKSPACE","TERM='linux'"]){
+                    def curImage = docker.build("srwight/codingchallenges:2.${env.BUILD_ID}")
+                    curImage.push()
 
-                curImage.push('latest')
+                    curImage.push('latest')
+                }
             }
         }
     }
