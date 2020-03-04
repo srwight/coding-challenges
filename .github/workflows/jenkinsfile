@@ -18,9 +18,9 @@ pipeline {
             }
         }
         stage('delivery') {
-            when {branch 'master'}
+            when { environment name: 'GIT_BRANCH', value: 'origin/master'}
             steps {
-                echo 'I\'m in'
+                echo 'I\'m in.'
             }
         }
     }
