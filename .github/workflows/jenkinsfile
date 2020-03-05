@@ -1,5 +1,10 @@
 pipeline {
-    agent { docker { image 'python:3.8' } }
+    agent { 
+        docker { 
+            image 'python:3.8'
+            args '-v jenkins-data:/var/jenkins_home -v jenkins-docker-certs:/certs/client:ro'
+        } 
+    }
     stages {
         stage('build') {
             steps {
@@ -17,16 +22,16 @@ pipeline {
                 }
             }
         }
-        // stage('delivery') {
-        //     when { environment name: 'GIT_BRANCH', value: 'origin/master'}
-        //     steps {
-        //         script {
-        //             def curImage = docker.build("srwight/codingchallenges:2.${env.BUILD_ID}")
-        //             curImage.push()
-        //             curImage.push('latest')
-        //         }
-        //     }
-        // }
+        stage('delivery') {
+            when { environment name: 'GIT_BRANCH', value: 'origin/master'}
+            steps {
+                script {
+                    def curImage = docker.build("srwight/codingchallenges:2.${env.BUILD_ID}")
+                    curImage.push()
+                    curImage.push('latest')
+                }
+            }
+        }
     }
     post {
             success {
