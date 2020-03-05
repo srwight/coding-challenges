@@ -1,5 +1,10 @@
 pipeline {
-    agent { docker { image 'python:3.8' } }
+    agent { 
+        docker { 
+            image 'python:3.8'
+            args '-v jenkins-data:/var/jenkins_home -v jenkins-docker-certs:/certs/client:ro'
+        } 
+    }
     stages {
         stage('build') {
             steps {
