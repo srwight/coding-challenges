@@ -2,7 +2,7 @@ pipeline {
     agent { 
         docker { 
             image 'python:3.8'
-            args '-v jenkins-data:/var/jenkins_home -v jenkins-docker-certs:/certs/client:ro -e DOCKER_HOST=tcp://docker:2376 -e DOCKER_CERT_PATH=/certs/client -e DOCKER_TLS_VERIFY=1 --network jenkins'
+            args '-v jenkins-data:/var/jenkins_home -v jenkins-docker-certs:/certs/client:ro -e DOCKER_HOST=tcp://docker:2376 -e DOCKER_CERT_PATH=/certs/client -e DOCKER_TLS_VERIFY=1'
         } 
     }
     stages {
@@ -23,6 +23,7 @@ pipeline {
             }
         }
         stage('delivery') {
+            agent{ docker {docker:dind} }
             when { environment name: 'GIT_BRANCH', value: 'origin/master'}
             steps {
                 script {
