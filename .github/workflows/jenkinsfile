@@ -23,7 +23,7 @@ pipeline {
             }
         }
         stage('delivery') {
-            agent{ {docker image 'docker:dind' } }
+            agent{ docker {image 'docker:dind' } }
             when { environment name: 'GIT_BRANCH', value: 'origin/master'}
             steps {
                 script {
