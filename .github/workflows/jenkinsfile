@@ -5,6 +5,9 @@ pipeline {
             args '-v jenkins-data:/var/jenkins_home -v jenkins-docker-certs:/certs/client:ro -e DOCKER_HOST=tcp://docker:2376 -e DOCKER_CERT_PATH=/certs/client -e DOCKER_TLS_VERIFY=1'
         } 
     }
+    environment {
+        GITHUB_CREDENTIALS = credentials('b0ebab55-59b0-43be-b604-5f4dca69ccac')
+    }
     stages {
         stage('build') {
             steps {
@@ -35,10 +38,10 @@ pipeline {
     }
     post {
             success {
-                sh 'curl -u srwight:d6ac278febed6edb7c1324476a976c921ba1539a "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
+                sh "curl -u ${GITHUB_CREDENTIALS_USR}:${GITHUB_CREDENTIALS_PSW} \"https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT\" -H \"Content-Type: application/json\" -X POST -d \"{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}\""
             }
             failure {
-                sh 'curl -u srwight:d6ac278febed6edb7c1324476a976c921ba1539a "https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT" -H "Content-Type: application/json" -X POST -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}"'
+                sh "curl -u ${GITHUB_CREDENTIALS_USR}:${GITHUB_CREDENTIALS_PSW} \"https://api.GitHub.com/repos/srwight/coding-challenges/statuses/$GIT_COMMIT\" -H \"Content-Type: application/json\" -X POST -d \"{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"www.eclectic-sheep.com:8080/job/staging_challenges/$BUILD_NUMBER/console\"}\""
             }
             always {
                 junit 'test-results/results.xml'
